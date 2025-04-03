@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<!-- Bind the lang attribute to the current language state -->
+<html :lang="currentLang" class="scroll-smooth" x-data="languageSwitcher()" x-init="init()">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rodrigo Franco</title>
-    <meta name="description" content="Ciencia Política, Datos, Economía">
+
+    <!-- Dynamic Title -->
+    <title x-text="translations[currentLang].pageTitle">Rodrigo Franco</title>
+    <!-- Dynamic Meta Description -->
+    <meta name="description" :content="translations[currentLang].metaDescription">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -20,68 +24,89 @@
 
     <style>
         /* Custom scrollbar (optional, for aesthetics) */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #a0aec0; /* Tailwind gray-500 */
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #718096; /* Tailwind gray-600 */
-        }
-        /* Add slight contrast to placeholder text */
-        ::placeholder {
-           color: #a0aec0; /* Tailwind gray-500 */
-           opacity: 1; /* Firefox */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #a0aec0; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #718096; }
+        ::placeholder { color: #a0aec0; opacity: 1; }
+
+        /* Style for active language button */
+        .lang-button-active {
+            font-weight: bold;
+            color: #3b82f6; /* primary color */
+            text-decoration: underline;
         }
     </style>
 
     <script>
-        // Optional: You can customize Tailwind further here if needed
         tailwind.config = {
           theme: {
             extend: {
               colors: {
-                primary: '#3b82f6', // Example primary color (blue-500)
-                secondary: '#6b7280', // Example secondary color (gray-500)
-                lightbg: '#f9fafb', // Example light background (gray-50)
+                primary: '#3b82f6',
+                secondary: '#6b7280',
+                lightbg: '#f9fafb',
               },
               fontFamily: {
-                sans: ['Inter', 'sans-serif'], // Example using a clean sans-serif font
+                sans: ['Inter', 'sans-serif'],
               },
             }
           }
         }
-      </script>
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-      <link rel="icon" href="RF_Favicon.ico" type="image/x-icon">
+    <link rel="icon" href="RF_Favicon.ico" type="image/x-icon">
 
 </head>
 <body class="bg-white text-gray-800 font-sans antialiased">
 
-    <!-- Navigation (Optional but recommended) -->
+    <!-- Navigation -->
     <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
+                <!-- Left Side: Name -->
                 <div class="flex-shrink-0">
-                    <a href="#" class="text-xl font-bold text-gray-800">Rodrigo Franco</a>
+                    <a href="#" class="text-xl font-bold text-gray-800" x-text="translations[currentLang].navName">Rodrigo Franco</a>
                 </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#hero" class="text-gray-600 hover:text-primary transition duration-300">Home</a>
-                    <a href="#projects" class="text-gray-600 hover:text-primary transition duration-300">Projects</a>
-                    <a href="#about" class="text-gray-600 hover:text-primary transition duration-300">About</a>
-                    <a href="#contact" class="text-gray-600 hover:text-primary transition duration-300">Contact</a>
+
+                <!-- Center: Links -->
+                <div class="hidden md:flex flex-grow justify-center space-x-8">
+                    <a href="#hero" class="text-gray-600 hover:text-primary transition duration-300" x-text="translations[currentLang].navHome">Home</a>
+                    <a href="#projects" class="text-gray-600 hover:text-primary transition duration-300" x-text="translations[currentLang].navProjects">Projects</a>
+                    <a href="#about" class="text-gray-600 hover:text-primary transition duration-300" x-text="translations[currentLang].navAbout">About</a>
+                    <!-- Removed Contact Link as there's no contact section in the provided HTML -->
                 </div>
-                <!-- Mobile Menu Button (Optional) -->
+
+                <!-- Right Side: Language Switcher -->
+                <div class="flex items-center space-x-3">
+                     <button
+                        @click="setLang('en')"
+                        :class="{ 'lang-button-active': currentLang === 'en' }"
+                        class="text-sm text-gray-600 hover:text-primary transition duration-300">
+                        EN
+                     </button>
+                     <span class="text-gray-300">|</span>
+                     <button
+                        @click="setLang('es')"
+                        :class="{ 'lang-button-active': currentLang === 'es' }"
+                        class="text-sm text-gray-600 hover:text-primary transition duration-300">
+                        ES
+                    </button>
+                     <span class="text-gray-300">|</span>
+                     <button
+                        @click="setLang('fr')"
+                        :class="{ 'lang-button-active': currentLang === 'fr' }"
+                        class="text-sm text-gray-600 hover:text-primary transition duration-300">
+                        FR
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button Placeholder -->
                 <div class="md:hidden">
-                   <!-- Add a button here if you want a mobile hamburger menu using Alpine.js -->
+                   <!-- Can add mobile menu logic here if needed -->
                 </div>
             </div>
         </div>
@@ -91,26 +116,28 @@
     <section id="hero" class="bg-lightbg min-h-[80vh] flex items-center py-20 lg:py-0">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div data-aos="fade-up">
-                <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 leading-tight mb-4">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 leading-tight mb-4"
+                    x-text="translations[currentLang].heroTitle">
                     Rodrigo Franco
                 </h1>
-                <p class="text-lg sm:text-xl text-secondary max-w-2xl mx-auto mb-8">
-                    Economía Datos Ensayo Fotografía
-                    <!-- Add a more specific intro sentence here -->
+                <p class="text-lg sm:text-xl text-secondary max-w-2xl mx-auto mb-8"
+                   x-text="translations[currentLang].heroSubtitle">
+                    Economics Data Essays Photography
                 </p>
                 <div class="flex justify-center space-x-6 mb-12">
-                    <a href="https://github.com/Roderictus" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile" class="text-gray-500 hover:text-primary transition duration-300 text-2xl">
+                    <a href="https://github.com/Roderictus" target="_blank" rel="noopener noreferrer" :aria-label="translations[currentLang].githubAriaLabel" class="text-gray-500 hover:text-primary transition duration-300 text-2xl">
                         <i class="fab fa-github"></i>
                     </a>
-                    <a href="https://www.linkedin.com/in/rodrigo-franco-a74b0018/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile" class="text-gray-500 hover:text-primary transition duration-300 text-2xl">
+                    <a href="https://www.linkedin.com/in/rodrigo-franco-a74b0018/" target="_blank" rel="noopener noreferrer" :aria-label="translations[currentLang].linkedinAriaLabel" class="text-gray-500 hover:text-primary transition duration-300 text-2xl">
                         <i class="fab fa-linkedin"></i>
                     </a>
-                    <a href="https://x.com/ContactAnaplian" target="_blank" rel="noopener noreferrer" aria-label="Twitter Profile" class="text-gray-500 hover:text-primary transition duration-300 text-2xl"> <!-- Add your Twitter link here -->
+                    <a href="https://x.com/ContactAnaplian" target="_blank" rel="noopener noreferrer" :aria-label="translations[currentLang].twitterAriaLabel" class="text-gray-500 hover:text-primary transition duration-300 text-2xl">
                         <i class="fab fa-twitter"></i>
                     </a>
                 </div>
-                <a href="#Proyectos" class="inline-block bg-primary text-white font-medium py-3 px-8 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 transform hover:-translate-y-1">
-                    Proyectos
+                <a href="#projects" class="inline-block bg-primary text-white font-medium py-3 px-8 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 transform hover:-translate-y-1"
+                   x-text="translations[currentLang].heroButton">
+                    Projects
                 </a>
             </div>
         </div>
@@ -119,53 +146,51 @@
     <!-- Projects Section -->
     <section id="projects" class="py-20">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12" data-aos="fade-up">
-                Proyectos
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12" data-aos="fade-up"
+                x-text="translations[currentLang].projectsHeading">
+                Projects
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
 
-                <!-- Project Card 1: Anaplian Website Preview -->
+                <!-- Project Card 1: Anaplian -->
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl" data-aos="fade-up" data-aos-delay="100">
-
                     <div class="w-full h-56 bg-gray-100 flex items-center justify-center overflow-hidden">
-                        <img class="max-w-full max-h-full object-contain p-4" src="images/Anaplian_Eng.png" alt="Anaplian Logo">
+                        <img class="max-w-full max-h-full object-contain p-4" src="images/Anaplian_Eng.png" :alt="translations[currentLang].project1Alt">
                     </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Anaplian</h3>
-                        <p class="text-secondary mb-4">Investigación Aplicada</p>
-                        <a href="https://anaplian.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Visitar el sitio</a>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2" x-text="translations[currentLang].project1Title">Anaplian</h3>
+                        <p class="text-secondary mb-4" x-text="translations[currentLang].project1Desc">Applied Research</p>
+                        <a href="https://anaplian.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium" x-text="translations[currentLang].project1Link">Visit Site</a>
                     </div>
                 </div>
 
-                <!-- Project Card 2 (Using portfolio image) -->
+                <!-- Project Card 2: Photography -->
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl" data-aos="fade-up" data-aos-delay="200">
-                    <img class="w-full h-56 object-cover" src="https://cdn.myportfolio.com/74dc0bea-cd61-47b3-953e-80b63cf0e770/3fe0b748-2a53-4a50-9534-87f63cf5e6a0_rw_1920.jpg?h=38cf331ed0e27fc28b50df783803c6aa" alt="Project 2 Image">
+                    <img class="w-full h-56 object-cover" src="https://cdn.myportfolio.com/74dc0bea-cd61-47b3-953e-80b63cf0e770/3fe0b748-2a53-4a50-9534-87f63cf5e6a0_rw_1920.jpg?h=38cf331ed0e27fc28b50df783803c6aa" :alt="translations[currentLang].project2Alt">
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Fotografía</h3>
-                        <p class="text-secondary mb-4">Una Selección de fotografías</p>
-                         <a href="https://rodrigofranco.myportfolio.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Visitar el sitio →</a>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2" x-text="translations[currentLang].project2Title">Photography</h3>
+                        <p class="text-secondary mb-4" x-text="translations[currentLang].project2Desc">A selection of photographs</p>
+                         <a href="https://rodrigofranco.myportfolio.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium" x-text="translations[currentLang].project2Link">Visit Site →</a>
                     </div>
                 </div>
 
-                <!-- Project Card 3: LinkedIn Newsletter - México en Datos -->
+                <!-- Project Card 3: Newsletter -->
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl" data-aos="fade-up" data-aos-delay="300">
-                    <!-- Use a representative image for the newsletter -->
-                    <img class="w-full h-56 object-cover" src="https://cdn.myportfolio.com/74dc0bea-cd61-47b3-953e-80b63cf0e770/3107d481-7d20-4f2d-8a2b-6a01299a2ece_rw_1920.jpg?h=e8223b52ef4d83cc6310acf2ae82d73b" alt="México en Datos Newsletter">
+                    <img class="w-full h-56 object-cover" src="https://cdn.myportfolio.com/74dc0bea-cd61-47b3-953e-80b63cf0e770/3107d481-7d20-4f2d-8a2b-6a01299a2ece_rw_1920.jpg?h=e8223b52ef4d83cc6310acf2ae82d73b" :alt="translations[currentLang].project3Alt">
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">México en Datos</h3>
-                        <p class="text-secondary mb-4">Mantente informado de nuevos proyectos con mi Newsletter de Linkedin</p>
-                        <a href="https://www.linkedin.com/newsletters/m%C3%A9xico-en-datos-7206938348416864258/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Ir al Newsletter en Linkedin →</a>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2" x-text="translations[currentLang].project3Title">México en Datos</h3>
+                        <p class="text-secondary mb-4" x-text="translations[currentLang].project3Desc">Stay informed about new projects with my LinkedIn Newsletter</p>
+                        <a href="https://www.linkedin.com/newsletters/m%C3%A9xico-en-datos-7206938348416864258/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium" x-text="translations[currentLang].project3Link">Go to Newsletter on LinkedIn →</a>
                     </div>
                 </div>
 
-                 <!-- Project Card 4 (Placeholder for another project) -->
+                 <!-- Project Card 4: Blog -->
                  <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl" data-aos="fade-up" data-aos-delay="400">
-                     <!-- Placeholder image - replace with actual project image -->
-                    <img class="w-full h-56 object-cover" src="https://cdn.myportfolio.com/74dc0bea-cd61-47b3-953e-80b63cf0e770/691daa61-f973-4292-9e08-668ad9b68ebe_rw_1920.jpg?h=9aed7dab50213b37c456be7f209cfb90" alt="México en Datos Newsletter">
+                    <img class="w-full h-56 object-cover" src="https://cdn.myportfolio.com/74dc0bea-cd61-47b3-953e-80b63cf0e770/691daa61-f973-4292-9e08-668ad9b68ebe_rw_1920.jpg?h=9aed7dab50213b37c456be7f209cfb90" :alt="translations[currentLang].project4Alt">
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Destrucción de la destrucción</h3>
-                        <p class="text-secondary mb-4">Blog de ensayo</p>
-                        <a href="https://destrucciondeladestruccion.blogspot.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Ir a Destrucción de la Destrucción →</a>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2" x-text="translations[currentLang].project4Title">Destrucción de la destrucción</h3>
+                        <p class="text-secondary mb-4" x-text="translations[currentLang].project4Desc">Essay Blog</p>
+                        <a href="https://destrucciondeladestruccion.blogspot.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium" x-text="translations[currentLang].project4Link">Go to Destrucción de la Destrucción →</a>
                     </div>
                 </div>
 
@@ -175,56 +200,210 @@
 
     <!-- About Me Section -->
     <section id="about" class="py-20 bg-lightbg">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xlmx-auto px-4 sm:px-6 lg:px-8">
             <div class="md:flex md:items-center md:space-x-12">
+                <!-- Left Column: About Text -->
                 <div class="md:w-1/2 mb-10 md:mb-0" data-aos="fade-right">
-                     <h2 class="text-3xl font-bold text-gray-900 mb-6">About Me</h2>
+                     <h2 class="text-3xl font-bold text-gray-900 mb-6" x-text="translations[currentLang].aboutHeading">About Me</h2>
                      <p class="text-secondary leading-relaxed mb-4">
-                         Actualmente soy el CEO de <a href="https://anaplian.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Anaplian</a> una empresa que aplica investigación a través de software a temas económicos. Nuestros proyectos más recientes utilizan datos satelitales ayudando a determinar el estado de conservación de las Áreas Naturales Protegidas en México, Islas de Calor, calidad y tipos de cultivos entre otros proyectos realizados por un equipo multidisciplinario unido por el gusto de resolver problemas a través de código.
+                         <span x-html="translations[currentLang].aboutParagraph1"></span> <!-- Use x-html for links within text -->
                      </p>
                       <p class="text-secondary leading-relaxed">
-                        Puedes encontrar mi perfil, publicaciones de newsletter recientes en mi<a href="https://www.linkedin.com/in/rodrigo-franco-a74b0018/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">perfil de Linkedin</a>. Puedes visitar mi blog de ensayo: <a href="https://destrucciondeladestruccion.blogspot.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Destruccion de la Destruccion</a>.
+                         <span x-html="translations[currentLang].aboutParagraph2"></span> <!-- Use x-html for links within text -->
                      </p>
                  </div>
+                 <!-- Right Column: GitHub Chart -->
                  <div class="md:w-1/2" data-aos="fade-left" data-aos-delay="200">
-                     <!-- GitHub Contributions Chart -->
                      <div class="bg-white p-6 rounded-xl shadow-lg text-center">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Github</h3>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4" x-text="translations[currentLang].githubTitle">GitHub</h3>
                         <a href="https://github.com/Roderictus" target="_blank" rel="noopener noreferrer">
-                           <img src="https://ghchart.rshah.org/Roderictus" alt="Rodrigo Franco's GitHub Contributions Chart" class="w-full h-auto mx-auto rounded">
+                           <img src="https://ghchart.rshah.org/Roderictus" :alt="translations[currentLang].githubAlt" class="w-full h-auto mx-auto rounded">
                          </a>
-                         <p class="text-sm text-gray-500 mt-4"> Calendario</p>
+                         <p class="text-sm text-gray-500 mt-4" x-text="translations[currentLang].githubCaption">Calendar</p>
                     </div>
-                    <!-- Optional: Add Anaplian logo here if desired -->
-                    <!-- <div class="mt-8 text-center">
-                         <a href="https://anaplian.com/" target="_blank" rel="noopener noreferrer">
-                             <img src="images/Anaplian_Eng.jpg" alt="Anaplian Logo" class="inline-block h-12 w-auto opacity-75 hover:opacity-100 transition duration-300">
-                         </a>
-                    </div> -->
                  </div>
             </div>
         </div>
     </section>
 
-
     <!-- Footer -->
     <footer class="bg-gray-800 text-gray-400 py-8">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
              <div class="flex justify-center space-x-6 mb-4">
-                 <a href="https://github.com/Roderictus" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile" class="hover:text-white transition duration-300 text-xl">
+                 <a href="https://github.com/Roderictus" target="_blank" rel="noopener noreferrer" :aria-label="translations[currentLang].githubAriaLabel" class="hover:text-white transition duration-300 text-xl">
                      <i class="fab fa-github"></i>
                  </a>
-                 <a href="https://www.linkedin.com/in/rodrigo-franco-a74b0018/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile" class="hover:text-white transition duration-300 text-xl">
+                 <a href="https://www.linkedin.com/in/rodrigo-franco-a74b0018/" target="_blank" rel="noopener noreferrer" :aria-label="translations[currentLang].linkedinAriaLabel" class="hover:text-white transition duration-300 text-xl">
                      <i class="fab fa-linkedin"></i>
                  </a>
-                 <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Twitter Profile" class="hover:text-white transition duration-300 text-xl"> <!-- Add your Twitter link here -->
+                 <a href="https://x.com/ContactAnaplian" target="_blank" rel="noopener noreferrer" :aria-label="translations[currentLang].twitterAriaLabel" class="hover:text-white transition duration-300 text-xl">
                      <i class="fab fa-twitter"></i>
                  </a>
              </div>
-             <p class="text-sm">© <span x-data="{ year: new Date().getFullYear() }" x-text="year"></span> Rodrigo Franco. All rights reserved.</p>
-             <p class="text-xs mt-2">Built with <a href="https://tailwindcss.com/" class="hover:text-white underline">Tailwind CSS</a>, <a href="https://alpinejs.dev/" class="hover:text-white underline">Alpine.js</a>, and <a href="https://michalsnik.github.io/aos/" class="hover:text-white underline">AOS</a>.</p>
+             <!-- Dynamic Copyright -->
+             <p class="text-sm">© <span x-data="{ year: new Date().getFullYear() }" x-text="year"></span> <span x-html="translations[currentLang].footerCopyright"></span></p>
+             <!-- Dynamic Built With -->
+             <p class="text-xs mt-2" x-html="translations[currentLang].footerBuiltWith"></p>
         </div>
     </footer>
+
+       <!-- Alpine.js Language Switcher Function -->
+       <script>
+        function languageSwitcher() {
+            return {
+                currentLang: 'es', // Default language set to Spanish
+                translations: {
+                    // English Translations
+                    en: {
+                        pageTitle: "Rodrigo Franco",
+                        metaDescription: "Political Science, Data, Economics, Photography",
+                        navName: "Rodrigo Franco",
+                        navHome: "Home",
+                        navProjects: "Projects",
+                        navAbout: "About",
+                        heroTitle: "Rodrigo Franco",
+                        heroSubtitle: "Economics Data Essays Photography",
+                        githubAriaLabel: "GitHub Profile",
+                        linkedinAriaLabel: "LinkedIn Profile",
+                        twitterAriaLabel: "Twitter Profile",
+                        heroButton: "Projects",
+                        projectsHeading: "Projects",
+                        project1Title: "Anaplian",
+                        project1Desc: "Applied Research",
+                        project1Link: "Visit Site",
+                        project1Alt: "Anaplian Logo",
+                        project2Title: "Photography",
+                        project2Desc: "A selection of photographs",
+                        project2Link: "Visit Site →",
+                        project2Alt: "Photography project image",
+                        project3Title: "México en Datos",
+                        project3Desc: "Stay informed about new projects with my LinkedIn Newsletter",
+                        project3Link: "Go to Newsletter on LinkedIn →",
+                        project3Alt: "México en Datos Newsletter Cover",
+                        project4Title: "Destrucción de la destrucción",
+                        project4Desc: "Essay Blog",
+                        project4Link: "Go to Destrucción de la Destrucción →",
+                        project4Alt: "Destrucción de la Destrucción Blog Image",
+                        aboutHeading: "About Me",
+                        aboutParagraph1: `Currently, I am the CEO of <a href="https://anaplian.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Anaplian</a>, a company that applies research through software to economic issues. Our most recent projects use satellite data to help determine the conservation status of Protected Natural Areas in Mexico, Heat Islands, crop quality and types, among other projects carried out by a multidisciplinary team united by the pleasure of solving problems through code.`,
+                        aboutParagraph2: `You can find my profile and recent newsletter publications on my <a href="https://www.linkedin.com/in/rodrigo-franco-a74b0018/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">LinkedIn profile</a>. You can visit my essay blog: <a href="https://destrucciondeladestruccion.blogspot.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Destruccion de la Destruccion</a>.`,
+                        githubTitle: "GitHub",
+                        githubAlt: "Rodrigo Franco's GitHub Contributions Chart",
+                        githubCaption: "Calendar",
+                        footerCopyright: "Rodrigo Franco. All rights reserved.",
+                        footerBuiltWith: `Built with <a href="https://tailwindcss.com/" class="hover:text-white underline">Tailwind CSS</a>, <a href="https://alpinejs.dev/" class="hover:text-white underline">Alpine.js</a>, and <a href="https://michalsnik.github.io/aos/" class="hover:text-white underline">AOS</a>.`
+                    },
+                     // Spanish Translations
+                    es: {
+                        pageTitle: "Rodrigo Franco",
+                        metaDescription: "Ciencia Política, Datos, Economía, Fotografía",
+                        navName: "Rodrigo Franco",
+                        navHome: "Inicio",
+                        navProjects: "Proyectos",
+                        navAbout: "Acerca de",
+                        heroTitle: "Rodrigo Franco",
+                        heroSubtitle: "Economía Datos Ensayos Fotografía",
+                        githubAriaLabel: "Perfil de GitHub",
+                        linkedinAriaLabel: "Perfil de LinkedIn",
+                        twitterAriaLabel: "Perfil de Twitter",
+                        heroButton: "Proyectos",
+                        projectsHeading: "Proyectos",
+                        project1Title: "Anaplian",
+                        project1Desc: "Investigación Aplicada",
+                        project1Link: "Visitar el Sitio",
+                        project1Alt: "Logo Anaplian",
+                        project2Title: "Fotografía",
+                        project2Desc: "Una Selección de fotografías",
+                        project2Link: "Visitar el Sitio →",
+                        project2Alt: "Imagen proyecto fotografía",
+                        project3Title: "México en Datos",
+                        project3Desc: "Mantente informado de nuevos proyectos con mi Newsletter de LinkedIn",
+                        project3Link: "Ir al Newsletter en LinkedIn →",
+                        project3Alt: "Portada Newsletter México en Datos",
+                        project4Title: "Destrucción de la destrucción",
+                        project4Desc: "Blog de Ensayo",
+                        project4Link: "Ir a Destrucción de la Destrucción →",
+                        project4Alt: "Imagen Blog Destrucción de la Destrucción",
+                        aboutHeading: "Acerca de Mí",
+                        aboutParagraph1: `Actualmente soy el CEO de <a href="https://anaplian.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Anaplian</a> una empresa que aplica investigación a través de software a temas económicos. Nuestros proyectos más recientes utilizan datos satelitales ayudando a determinar el estado de conservación de las Áreas Naturales Protegidas en México, Islas de Calor, calidad y tipos de cultivos entre otros proyectos realizados por un equipo multidisciplinario unido por el gusto de resolver problemas a través de código.`,
+                        aboutParagraph2: `Puedes encontrar mi perfil, publicaciones de newsletter recientes en mi <a href="https://www.linkedin.com/in/rodrigo-franco-a74b0018/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">perfil de Linkedin</a>. Puedes visitar mi blog de ensayo: <a href="https://destrucciondeladestruccion.blogspot.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Destruccion de la Destruccion</a>.`,
+                        githubTitle: "GitHub",
+                        githubAlt: "Gráfica de Contribuciones de GitHub de Rodrigo Franco",
+                        githubCaption: "Calendario",
+                        footerCopyright: "Rodrigo Franco. Todos los derechos reservados.",
+                        footerBuiltWith: `Hecho con <a href="https://tailwindcss.com/" class="hover:text-white underline">Tailwind CSS</a>, <a href="https://alpinejs.dev/" class="hover:text-white underline">Alpine.js</a>, y <a href="https://michalsnik.github.io/aos/" class="hover:text-white underline">AOS</a>.`
+                    },
+                    // French Translations
+                    fr: {
+                        pageTitle: "Rodrigo Franco",
+                        metaDescription: "Science Politique, Données, Économie, Photographie",
+                        navName: "Rodrigo Franco",
+                        navHome: "Accueil",
+                        navProjects: "Projets",
+                        navAbout: "À Propos",
+                        heroTitle: "Rodrigo Franco",
+                        heroSubtitle: "Économie Données Essais Photographie",
+                        githubAriaLabel: "Profil GitHub",
+                        linkedinAriaLabel: "Profil LinkedIn",
+                        twitterAriaLabel: "Profil Twitter",
+                        heroButton: "Projets",
+                        projectsHeading: "Projets",
+                        project1Title: "Anaplian",
+                        project1Desc: "Recherche Appliquée",
+                        project1Link: "Visiter le Site",
+                        project1Alt: "Logo Anaplian",
+                        project2Title: "Photographie",
+                        project2Desc: "Une sélection de photographies",
+                        project2Link: "Visiter le Site →",
+                        project2Alt: "Image du projet de photographie",
+                        project3Title: "México en Datos",
+                        project3Desc: "Restez informé des nouveaux projets avec ma Newsletter LinkedIn",
+                        project3Link: "Aller à la Newsletter sur LinkedIn →",
+                        project3Alt: "Couverture de la Newsletter México en Datos",
+                        project4Title: "Destrucción de la destrucción",
+                        project4Desc: "Blog d'Essais",
+                        project4Link: "Aller à Destrucción de la Destrucción →",
+                        project4Alt: "Image du Blog Destrucción de la Destrucción",
+                        aboutHeading: "À Propos de Moi",
+                        aboutParagraph1: `Actuellement, je suis le PDG d'<a href="https://anaplian.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Anaplian</a>, une entreprise qui applique la recherche par le biais de logiciels aux questions économiques. Nos projets les plus récents utilisent des données satellitaires pour aider à déterminer l'état de conservation des Aires Naturelles Protégées au Mexique, les Îlots de Chaleur, la qualité et les types de cultures, entre autres projets réalisés par une équipe multidisciplinaire unie par le plaisir de résoudre des problèmes grâce au code.`,
+                        aboutParagraph2: `Vous pouvez trouver mon profil et mes publications récentes de newsletter sur mon <a href="https://www.linkedin.com/in/rodrigo-franco-a74b0018/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">profil LinkedIn</a>. Vous pouvez visiter mon blog d'essais : <a href="https://destrucciondeladestruccion.blogspot.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Destruccion de la Destruccion</a>.`,
+                        githubTitle: "GitHub",
+                        githubAlt: "Graphique des Contributions GitHub de Rodrigo Franco",
+                        githubCaption: "Calendrier",
+                        footerCopyright: "Rodrigo Franco. Tous droits réservés.",
+                        footerBuiltWith: `Créé avec <a href="https://tailwindcss.com/" class="hover:text-white underline">Tailwind CSS</a>, <a href="https://alpinejs.dev/" class="hover:text-white underline">Alpine.js</a>, et <a href="https://michalsnik.github.io/aos/" class="hover:text-white underline">AOS</a>.`
+                    }
+                },
+                // Function to change the language
+                setLang(lang) {
+                    if (this.translations[lang]) {
+                        this.currentLang = lang;
+                        // Optional: Store preference in localStorage
+                        localStorage.setItem('preferredLang', lang);
+                        // Update the HTML lang attribute directly for better accessibility/SEO
+                        document.documentElement.lang = lang;
+                    }
+                },
+                // Initialize function to check localStorage or browser language
+                init() {
+                    let initialLang = 'es'; // Set Spanish as the default initial language
+                    const preferredLang = localStorage.getItem('preferredLang');
+
+                    if (preferredLang && this.translations[preferredLang]) {
+                        initialLang = preferredLang;
+                    } else {
+                        // Fallback to browser language if no preference stored
+                        const browserLang = navigator.language.split('-')[0];
+                        if (this.translations[browserLang]) {
+                             initialLang = browserLang;
+                        }
+                    }
+                    this.currentLang = initialLang;
+                    document.documentElement.lang = initialLang; // Set initial lang attribute
+                }
+            }
+        }
+    </script>
 
     <!-- AOS JS (Animate On Scroll) CDN -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -236,5 +415,14 @@
         });
     </script>
 
+    <!-- AOS JS (Animate On Scroll) CDN -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800, // values from 0 to 3000, with step 50ms
+            once: true, // whether animation should happen only once - while scrolling down
+        });
+    </script>
 </body>
 </html>
