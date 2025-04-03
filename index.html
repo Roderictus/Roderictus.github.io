@@ -1,234 +1,240 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <title>Rodrigo Franco</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    /* Base styling: terminal green on black with a monospaced font */
-    body {
-      background-color: #000;
-      color: rgb(193, 255, 198);
-      font-family: "Courier New", Courier, monospace;
-      margin: 0;
-      padding: 0;
-      line-height: 1.5;
-    }
-    /* Header with background video */
-    header {
-      position: relative;
-      height: 60vh;
-      overflow: hidden;
-    }
-    .video-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      z-index: -1;
-    }
-    .video-container video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .video-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5); /* Dark overlay to boost text legibility */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-    .ascii-header {
-      white-space: pre;
-      font-size: 1.5em;
-      margin: 0;
-      padding: 0 1em;
-    }
-    /* Container for the main content */
-    .container {
-      max-width: 800px;
-      margin: 2em auto;
-      padding: 1em;
-      border: 2px solid #0f0;
-      background-color: rgba(0, 0, 0, 0.85);
-      position: relative;
-      z-index: 1;
-    }
-    /* Section styling with ASCII borders */
-    .section {
-      margin: 1.5em 0;
-      padding: 1em;
-      border: 1px dashed #0f0;
-    }
-    h2 {
-      margin: 0.5em 0;
-    }
-    a {
-      color: #0f0;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    /* Carousel styles */
-    .carousel {
-     position: relative;
-     overflow: hidden;
-     min-height: 400px; /* or whatever height suits your images */
-   }
-    .carousel-item {
-      position: absolute;
-      width: 100%;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-      text-align: center;
-      line-height: 4em;
-    }
-    .carousel-item.active {
-      opacity: 1;
-    }
-    /* Footer styling */
-    footer {
-      text-align: center;
-      margin: 1em 0;
-    }
-    /* Responsive adjustments */
-    @media (max-width: 600px) {
-      .container {
-        margin: 1em;
-        padding: 0.5em;
-      }
-      .ascii-header {
-        font-size: 1.2em;
-      }
-    }
-    .centered-link {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rodrigo Franco</title>
+    <meta name="description" content="Ciencia Política, Datos, Economía">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Alpine.js CDN -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- AOS CSS (Animate On Scroll) CDN -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- FontAwesome CDN (for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* Custom scrollbar (optional, for aesthetics) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a0aec0; /* Tailwind gray-500 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #718096; /* Tailwind gray-600 */
+        }
+        /* Add slight contrast to placeholder text */
+        ::placeholder {
+           color: #a0aec0; /* Tailwind gray-500 */
+           opacity: 1; /* Firefox */
+        }
+    </style>
+
+    <script>
+        // Optional: You can customize Tailwind further here if needed
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                primary: '#3b82f6', // Example primary color (blue-500)
+                secondary: '#6b7280', // Example secondary color (gray-500)
+                lightbg: '#f9fafb', // Example light background (gray-50)
+              },
+              fontFamily: {
+                sans: ['Inter', 'sans-serif'], // Example using a clean sans-serif font
+              },
+            }
+          }
+        }
+      </script>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+      <link rel="icon" href="RF_Favicon.ico" type="image/x-icon">
+
 </head>
-<body>
-  <!-- Header with a background video placeholder -->
-  <header>
-    <div class="video-container">
-      <!-- Replace the source below with your own background video if desired -->
-      <video autoplay loop muted playsinline>
-        <source src="images/Chapala_Este.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </div>
-    <div class="video-overlay">
-      <div class="ascii-header">
-╔════════════════════════════════════════╗<br>
-║  Rodrigo Franco  ║<br>
-╚════════════════════════════════════════╝
-      </div>
-    </div>
-  </header>
+<body class="bg-white text-gray-800 font-sans antialiased">
 
-  <div class="container">
-    <section class="section" id="linkedin-section">
-      
-      <p>
-        <h2>
-          <a href="https://www.linkedin.com/in/rodrigo-franco-a74b0018/" target="_blank">
-            LinkedIn
-          </a>
-        </h2>
-      </p>
-    </section>
-
-    <!-- Company Section -->
-    <section class="section" id="company-section">
-      <h2>
-        <a href="https://anaplian.com/" target="_blank">
-          <img src="images/Anaplian_Eng.jpg" alt="Anaplian Logo" style="display: block; margin: 0 auto; width: 350px; height: auto;">
-          <p style="text-align: center;"></p>
-        </a>
-      </h2>
-    </section>
-
-
-
-    <section class="section" id="carousel-section">
-      <div class="carousel" style="height: 300px;">
-        <div class="carousel-item active" style="line-height: normal;">
-          <a href=https://rodrigofranco.myportfolio.com/ target="_blank">
-            <img src="https://cdn.myportfolio.com/74dc0bea-cd61-47b3-953e-80b63cf0e770/28a4613d-2828-409f-8700-51abeae32e56_rw_1920.jpg?h=82675d39a94560c025c6ecaeb4cf6754" alt="Slide 1" style="width: 100%; max-width: 600px; height: auto;">
-          </a>
+    <!-- Navigation (Optional but recommended) -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0">
+                    <a href="#" class="text-xl font-bold text-gray-800">Rodrigo Franco</a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#hero" class="text-gray-600 hover:text-primary transition duration-300">Home</a>
+                    <a href="#projects" class="text-gray-600 hover:text-primary transition duration-300">Projects</a>
+                    <a href="#about" class="text-gray-600 hover:text-primary transition duration-300">About</a>
+                    <a href="#contact" class="text-gray-600 hover:text-primary transition duration-300">Contact</a>
+                </div>
+                <!-- Mobile Menu Button (Optional) -->
+                <div class="md:hidden">
+                   <!-- Add a button here if you want a mobile hamburger menu using Alpine.js -->
+                </div>
+            </div>
         </div>
-        <div class="carousel-item" style="line-height: normal;">
-          <a href=https://rodrigofranco.myportfolio.com/ target="_blank">
-            <img src="https://cdn.myportfolio.com/74dc0bea-cd61-47b3-953e-80b63cf0e770/3fe0b748-2a53-4a50-9534-87f63cf5e6a0_rw_1920.jpg?h=38cf331ed0e27fc28b50df783803c6aa" alt="Slide 2" style="width: 100%; max-width: 600px; height: auto;">
-          </a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="bg-lightbg min-h-[80vh] flex items-center py-20 lg:py-0">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div data-aos="fade-up">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 leading-tight mb-4">
+                    Rodrigo Franco
+                </h1>
+                <p class="text-lg sm:text-xl text-secondary max-w-2xl mx-auto mb-8">
+                    Economía Datos Ensayo Fotografía
+                    <!-- Add a more specific intro sentence here -->
+                </p>
+                <div class="flex justify-center space-x-6 mb-12">
+                    <a href="https://github.com/Roderictus" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile" class="text-gray-500 hover:text-primary transition duration-300 text-2xl">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/rodrigo-franco-a74b0018/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile" class="text-gray-500 hover:text-primary transition duration-300 text-2xl">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://x.com/ContactAnaplian" target="_blank" rel="noopener noreferrer" aria-label="Twitter Profile" class="text-gray-500 hover:text-primary transition duration-300 text-2xl"> <!-- Add your Twitter link here -->
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+                <a href="#Proyectos" class="inline-block bg-primary text-white font-medium py-3 px-8 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 transform hover:-translate-y-1">
+                    Proyectos
+                </a>
+            </div>
         </div>
-        <div class="carousel-item" style="line-height: normal;">
-          <a href=https://rodrigofranco.myportfolio.com/ target="_blank">
-            <img src="https://cdn.myportfolio.com/74dc0bea-cd61-47b3-953e-80b63cf0e770/3107d481-7d20-4f2d-8a2b-6a01299a2ece_rw_1920.jpg?h=e8223b52ef4d83cc6310acf2ae82d73b" alt="Slide 3" style="width: 100%; max-width: 600px; height: auto;">
-          </a>
-        </div>
-        <div class="carousel-item" style="line-height: normal;">
-          <a href=https://rodrigofranco.myportfolio.com/ target="_blank">
-            <img src="https://cdn.myportfolio.com/74dc0bea-cd61-47b3-953e-80b63cf0e770/24aca67c-2273-4eab-b5f8-89a3650ec9f9_rw_1920.jpg?h=c06b5fb6dc17f771f8ce6d87a1ca711a" alt="Slide 4" style="width: 100%; max-width: 600px; height: auto;">
-          </a>
-        </div>
-      </div>
     </section>
 
-    <!-- GitHub Contributions Widget -->
-    <section class="section" id="github-section">
-      
-      </p>
-      <!-- Contribution chart generated from an external service -->
-      <div style="text-align: center;">
-        <a href="https://github.com/Roderictus" target="_blank">
-          <img src="https://ghchart.rshah.org/Roderictus" alt="GitHub Contributions Chart" style="max-width:100%;">
-        </a>
-      </div>
+    <!-- Projects Section -->
+    <section id="projects" class="py-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12" data-aos="fade-up">
+                Proyectos
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+                <!-- Project Card 1: Anaplian Website Preview -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl" data-aos="fade-up" data-aos-delay="100">
+
+                    <div class="w-full h-56 bg-gray-100 flex items-center justify-center overflow-hidden">
+                        <img class="max-w-full max-h-full object-contain p-4" src="images/Anaplian_Eng.png" alt="Anaplian Logo">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Anaplian</h3>
+                        <p class="text-secondary mb-4">Investigación Aplicada</p>
+                        <a href="https://anaplian.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Visitar el sitio</a>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 (Using portfolio image) -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl" data-aos="fade-up" data-aos-delay="200">
+                    <img class="w-full h-56 object-cover" src="https://cdn.myportfolio.com/74dc0bea-cd61-47b3-953e-80b63cf0e770/3fe0b748-2a53-4a50-9534-87f63cf5e6a0_rw_1920.jpg?h=38cf331ed0e27fc28b50df783803c6aa" alt="Project 2 Image">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Fotografía</h3>
+                        <p class="text-secondary mb-4">Una Selección de fotografías</p>
+                         <a href="https://rodrigofranco.myportfolio.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Visitar el sitio →</a>
+                    </div>
+                </div>
+
+                <!-- Project Card 3: LinkedIn Newsletter - México en Datos -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl" data-aos="fade-up" data-aos-delay="300">
+                    <!-- Use a representative image for the newsletter -->
+                    <img class="w-full h-56 object-cover" src="https://cdn.myportfolio.com/74dc0bea-cd61-47b3-953e-80b63cf0e770/3107d481-7d20-4f2d-8a2b-6a01299a2ece_rw_1920.jpg?h=e8223b52ef4d83cc6310acf2ae82d73b" alt="México en Datos Newsletter">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">México en Datos</h3>
+                        <p class="text-secondary mb-4">Mantente informado de nuevos proyectos con mi Newsletter de Linkedin</p>
+                        <a href="https://www.linkedin.com/newsletters/m%C3%A9xico-en-datos-7206938348416864258/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Ir al Newsletter en Linkedin →</a>
+                    </div>
+                </div>
+
+                 <!-- Project Card 4 (Placeholder for another project) -->
+                 <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl" data-aos="fade-up" data-aos-delay="400">
+                     <!-- Placeholder image - replace with actual project image -->
+                    <img class="w-full h-56 object-cover" src="https://cdn.myportfolio.com/74dc0bea-cd61-47b3-953e-80b63cf0e770/691daa61-f973-4292-9e08-668ad9b68ebe_rw_1920.jpg?h=9aed7dab50213b37c456be7f209cfb90" alt="México en Datos Newsletter">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Destrucción de la destrucción</h3>
+                        <p class="text-secondary mb-4">Blog de ensayo</p>
+                        <a href="https://destrucciondeladestruccion.blogspot.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Ir a Destrucción de la Destrucción →</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </section>
 
-   
-
-
-    <!-- Blog Section -->
-    <section class="section" id="blog-section">
-      <h2>
-        <p>
-        
-          <a href="https://destrucciondeladestruccion.blogspot.com/" target="_blank">
-            Destruccion de la Destruccion
-          </a>
-      </h2>
+    <!-- About Me Section -->
+    <section id="about" class="py-20 bg-lightbg">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="md:flex md:items-center md:space-x-12">
+                <div class="md:w-1/2 mb-10 md:mb-0" data-aos="fade-right">
+                     <h2 class="text-3xl font-bold text-gray-900 mb-6">About Me</h2>
+                     <p class="text-secondary leading-relaxed mb-4">
+                         Actualmente soy el CEO de <a href="https://anaplian.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Anaplian</a> una empresa que aplica investigación a través de software a temas económicos. Nuestros proyectos más recientes utilizan datos satelitales ayudando a determinar el estado de conservación de las Áreas Naturales Protegidas en México, Islas de Calor, calidad y tipos de cultivos entre otros proyectos realizados por un equipo multidisciplinario unido por el gusto de resolver problemas a través de código.
+                     </p>
+                      <p class="text-secondary leading-relaxed">
+                        Puedes encontrar mi perfil, publicaciones de newsletter recientes en mi<a href="https://www.linkedin.com/in/rodrigo-franco-a74b0018/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">perfil de Linkedin</a>. Puedes visitar mi blog de ensayo: <a href="https://destrucciondeladestruccion.blogspot.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline font-medium">Destruccion de la Destruccion</a>.
+                     </p>
+                 </div>
+                 <div class="md:w-1/2" data-aos="fade-left" data-aos-delay="200">
+                     <!-- GitHub Contributions Chart -->
+                     <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Github</h3>
+                        <a href="https://github.com/Roderictus" target="_blank" rel="noopener noreferrer">
+                           <img src="https://ghchart.rshah.org/Roderictus" alt="Rodrigo Franco's GitHub Contributions Chart" class="w-full h-auto mx-auto rounded">
+                         </a>
+                         <p class="text-sm text-gray-500 mt-4"> Calendario</p>
+                    </div>
+                    <!-- Optional: Add Anaplian logo here if desired -->
+                    <!-- <div class="mt-8 text-center">
+                         <a href="https://anaplian.com/" target="_blank" rel="noopener noreferrer">
+                             <img src="images/Anaplian_Eng.jpg" alt="Anaplian Logo" class="inline-block h-12 w-auto opacity-75 hover:opacity-100 transition duration-300">
+                         </a>
+                    </div> -->
+                 </div>
+            </div>
+        </div>
     </section>
+
 
     <!-- Footer -->
-    
-  </div>
+    <footer class="bg-gray-800 text-gray-400 py-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+             <div class="flex justify-center space-x-6 mb-4">
+                 <a href="https://github.com/Roderictus" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile" class="hover:text-white transition duration-300 text-xl">
+                     <i class="fab fa-github"></i>
+                 </a>
+                 <a href="https://www.linkedin.com/in/rodrigo-franco-a74b0018/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile" class="hover:text-white transition duration-300 text-xl">
+                     <i class="fab fa-linkedin"></i>
+                 </a>
+                 <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Twitter Profile" class="hover:text-white transition duration-300 text-xl"> <!-- Add your Twitter link here -->
+                     <i class="fab fa-twitter"></i>
+                 </a>
+             </div>
+             <p class="text-sm">© <span x-data="{ year: new Date().getFullYear() }" x-text="year"></span> Rodrigo Franco. All rights reserved.</p>
+             <p class="text-xs mt-2">Built with <a href="https://tailwindcss.com/" class="hover:text-white underline">Tailwind CSS</a>, <a href="https://alpinejs.dev/" class="hover:text-white underline">Alpine.js</a>, and <a href="https://michalsnik.github.io/aos/" class="hover:text-white underline">AOS</a>.</p>
+        </div>
+    </footer>
 
-  <!-- JavaScript for Carousel functionality -->
-  <script>
-    (function() {
-      const carouselItems = document.querySelectorAll('.carousel-item');
-      let currentIndex = 0;
-      const totalItems = carouselItems.length;
-      
-      setInterval(() => {
-        carouselItems[currentIndex].classList.remove('active');
-        currentIndex = (currentIndex + 1) % totalItems;
-        carouselItems[currentIndex].classList.add('active');
-      }, 3000); // Change slide every 3 seconds
-    })();
-  </script>
+    <!-- AOS JS (Animate On Scroll) CDN -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800, // values from 0 to 3000, with step 50ms
+            once: true, // whether animation should happen only once - while scrolling down
+        });
+    </script>
+
 </body>
 </html>
